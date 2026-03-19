@@ -1,0 +1,6 @@
+[{HEX4}] <WARNING> F35 Head{STATE} YC248-JR-071KL Failed to pick up a part properly. [C~{INT},S~{INT},T~{INT},Q~{INT},L~{INT},A~{INT},P~{INT},H~{INT},F~{HEX8},Anc~{HEX8},N~{INT}] [{HEX4},{HEX4},{HEX5},{HEX4},{HEX4},{HEX4}]
+[{HEX4}] <ERROR> Z-Axis Drive XA-99 servo overload detected during rapid movement. [C~{INT},S~{INT},T~{INT},Q~{INT},L~{INT},A~{INT},P~{INT},H~{INT},F~{HEX8},Anc~{HEX8},N~{INT}] [{HEX4},{HEX4},{HEX5},{HEX4},{HEX4},{HEX4}]
+[{HEX4}] <FATAL> Emergency stop triggered by external safety relay. [C~{INT},S~{INT},T~{INT},Q~{INT},L~{INT},A~{INT},P~{INT},H~{INT},F~{HEX8},Anc~{HEX8},N~{INT}] [{HEX4},{HEX4},{HEX5},{HEX4},{HEX4},{HEX4}]
+[{HEX4}] <WARNING> VisionSystem M22 unable to recognize fiducial mark on PCB. [C~{INT},S~{INT},T~{INT},Q~{INT},L~{INT},A~{INT},P~{INT},H~{INT},F~{HEX8},Anc~{HEX8},N~{INT}] [{HEX4},{HEX4},{HEX5},{HEX4},{HEX4},{HEX4}]
+[{HEX4}] <ERROR> Pneumatic pressure dropped below operational threshold ({INT} bar). [C~{INT},S~{INT},T~{INT},Q~{INT},L~{INT},A~{INT},P~{INT},H~{INT},F~{HEX8},Anc~{HEX8},N~{INT}] [{HEX4},{HEX4},{HEX5},{HEX4},{HEX4},{HEX4}]
+[{HEX4}] <ERROR> Communication timeout with Module-IO-{STATE}. [C~{INT},S~{INT},T~{INT},Q~{INT},L~{INT},A~{INT},P~{INT},H~{INT},F~{HEX8},Anc~{HEX8},N~{INT}] [{HEX4},{HEX4},{HEX5},{HEX4},{HEX4},{HEX4}]

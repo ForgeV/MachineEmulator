@@ -1,0 +1,8 @@
+[MainFrm::StatusCheck] Machine status is changed : {STATE_OLD} -> {STATE_NEW}
+[AutoMode::Process] Production cycle started. Batch ID: {HEX4}
+[AxisZ::Calibration] Axis calibration completed successfully. Offset: {INT} mm.
+[Loader::Move] Pallet transferred from zone {STATE_OLD} to zone {STATE_NEW}.
+[Network::Sync] Data synchronized with MES server. Latency: {INT} ms.
+[ToolChanger::Action] Tool changed to slot {STATE}. Verification passed.
+[CoolingSystem::Monitor] Temperature stabilized at {INT} degrees Celsius.
+[Maintenance::Check] Routine self-diagnostic finished. Modules checked: {INT}.
