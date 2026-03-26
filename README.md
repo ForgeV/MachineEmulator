@@ -55,3 +55,5 @@
 - [ ] Отчет - 12 неделя
 
 <img width="1422" height="918" alt="Архитектура Эмулятора станка" src="https://github.com/user-attachments/assets/47414f67-a5cb-49b3-bf49-33b35c4c1b4d" />
+<img width="779" height="189" alt="Легенда ReadMe" src="https://github.com/user-attachments/assets/4b77d078-4fe1-4415-a56c-fba9cfb18021" />
+
