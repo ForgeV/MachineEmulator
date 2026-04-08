@@ -4,9 +4,6 @@
 #include <string.h>
 #include <stdbool.h>
 
-// =====================================================================
-// Структуры данных (В финале будут в time_utils.h)
-// =====================================================================
 #include "time_utils.h"
 
 static void add_milliseconds(SYSTEMTIME* st, DWORD ms_to_add) {
