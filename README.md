@@ -1,4 +1,4 @@
-### Проект "Mashine Emulator"
+### Проект "Machine Emulator"
 
 
 ## Содержание
@@ -27,7 +27,7 @@
 4. time.h
 5. stdbool.h
 6. windows.h
-
+7. commdlg.h
 
 # Технологический стек.
 1. Среда разработки - CLion 2025.2
