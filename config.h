@@ -20,5 +20,5 @@ typedef struct {
 } AppConfig;
 
 bool load_configuration(int argc, char *argv[], AppConfig *config);
-
+void load_from_ini(const char* absolute_ini_path, AppConfig* config);
 #endif
