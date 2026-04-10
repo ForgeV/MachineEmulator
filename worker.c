@@ -2,7 +2,7 @@
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "config.h"      // Предполагаемые заголовки
+#include "config.h"
 #include "logger.h"
 #include "generator.h"
 #include "time_utils.h"
@@ -58,7 +58,7 @@ DWORD WINAPI operate_worker(LPVOID lpParam) {
     TemplateList templates;
     LoggerContext logger;
     
-    load_templates("../source/source_operate.txt", &templates);
+    load_templates(config -> path_source_op, &templates);
     init_logger(&logger, config->out_dir_operate, "operate", config->rotation_strategy,config->codepage);
 
     WorkerParams params = { config, &templates, &logger, "OPERATE", false };
@@ -76,7 +76,7 @@ DWORD WINAPI error_worker(LPVOID lpParam) {
     TemplateList templates;
     LoggerContext logger;
     
-    load_templates("../source/source_error.txt", &templates);
+    load_templates(config -> path_source_err, &templates);
     init_logger(&logger, config->out_dir_error, "error", config->rotation_strategy, config->codepage);
 
     WorkerParams params = { config, &templates, &logger, "ERROR", true };
@@ -87,3 +87,4 @@ DWORD WINAPI error_worker(LPVOID lpParam) {
     free_templates(&templates);
     return 0;
 }
+

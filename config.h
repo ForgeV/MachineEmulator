@@ -15,6 +15,8 @@ typedef struct {
     char start_datetime[32];
     UINT codepage;
     char time_mask[64];
+    char path_source_op[MAX_PATH];
+    char path_source_err[MAX_PATH];
 } AppConfig;
 
 bool load_configuration(int argc, char *argv[], AppConfig *config);

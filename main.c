@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include "config.h"
 #include "worker.h"
+#include "ui_helper.h"
 
 HANDLE hShutdownEvent = NULL;
 HANDLE hConsoleMutex = NULL;
@@ -43,6 +44,19 @@ int main(int argc, char *argv[]) {
         printf("[ERROR] Не удалось установить обработчик консоли.\n");
         return EXIT_FAILURE;
     }
+
+    char op_path[260], err_path[260];
+
+    prompt_for_template_file(op_path, "Choose a template OPERATE file");
+    prompt_for_template_file(err_path, "Choose a template ERROR file");
+    if (strlen(op_path) <= 0) {
+        strcpy(op_path,"../source/source_operate.txt");
+    }
+    if (strlen(err_path) <= 0) {
+        strcpy(err_path,"../source/source_error.txt");
+    }
+    strcpy(config.path_source_op,op_path);
+    strcpy(config.path_source_err,err_path);
 
     printf("[MAIN] Эмулятор станка запущен. Нажмите Ctrl+C для выхода.\n");
 

@@ -14,4 +14,6 @@ add_executable(untitled1 main.c
         generator.h
         time_utils.h
         worker.h
-        config.c)
+        config.c
+        ui_helper.c
+        ui_helper.h)
