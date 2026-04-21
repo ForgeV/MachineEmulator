@@ -63,57 +63,55 @@ void advance_time(TimeContext* ctx) {
 
 // Превращение структуры времени в строку по маске.
 bool format_time_string(TimeContext* ctx, const char* format_mask, char* out_buffer, size_t max_len) {
-    if (!ctx || !format_mask || !out_buffer) return false;
+    if (!ctx || !format_mask || !out_buffer || max_len == 0) return false;
 
     SYSTEMTIME* st = &ctx->current_virtual_time;
-    char temp[32];
+    const char* m = format_mask;
+    size_t out_idx = 0;
 
-    // Копируем маску в выходной буфер.
-    strncpy(out_buffer, format_mask, max_len - 1);
-    out_buffer[max_len - 1] = '\0';
+    // Идем по маске, пока не достигнем конца
+    while (*m != '\0' && out_idx < max_len - 1) {
+        size_t space_left = max_len - out_idx;
+        int w = 0;
 
-    // Год
-    snprintf(temp, sizeof(temp), "%04d", st->wYear);
-    char* pos;
-    while ((pos = strstr(out_buffer, "YYYY")) != NULL) {
-        memcpy(pos, temp, 4);
+        // Проверка тегов
+        if (strncmp(m, "yyyy", 4) == 0 || strncmp(m, "YYYY", 4) == 0)  {
+            w = snprintf(out_buffer + out_idx, space_left, "%04d", st->wYear);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 4; continue; }
+        }
+        else if (strncmp(m, "yy", 2) == 0 || strncmp(m, "YY", 2) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%02d", st->wYear % 100);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 2; continue; }
+        }
+        else if (strncmp(m, "SSS", 3) == 0 || strncmp(m, "sss", 3) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%03d", st->wMilliseconds);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 3; continue; }
+        }
+        else if (strncmp(m, "MM", 2) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%02d", st->wMonth);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 2; continue; }
+        }
+        else if (strncmp(m, "dd", 2) == 0 || strncmp(m, "DD", 2) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%02d", st->wDay);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 2; continue; }
+        }
+        else if (strncmp(m, "HH", 2) == 0 || strncmp(m, "hh", 2) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%02d", st->wHour);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 2; continue; }
+        }
+        else if (strncmp(m, "mm", 2) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%02d", st->wMinute);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 2; continue; }
+        }
+        else if (strncmp(m, "ss", 2) == 0 || strncmp(m, "SS", 2) == 0) {
+            w = snprintf(out_buffer + out_idx, space_left, "%02d", st->wSecond);
+            if (w > 0 && (size_t)w < space_left) { out_idx += w; m += 2; continue; }
+        }
+
+        // Если это не тег, копируем как есть
+        out_buffer[out_idx++] = *m++;
     }
+    out_buffer[out_idx] = '\0';
 
-    // Месяц
-    snprintf(temp, sizeof(temp), "%02d", st->wMonth);
-    while ((pos = strstr(out_buffer, "MM")) != NULL) {
-        memcpy(pos, temp, 2);
-    }
-
-    // День
-    snprintf(temp, sizeof(temp), "%02d", st->wDay);
-    while ((pos = strstr(out_buffer, "DD")) != NULL) {
-        memcpy(pos, temp, 2);
-    }
-
-    // Часы
-    snprintf(temp, sizeof(temp), "%02d", st->wHour);
-    while ((pos = strstr(out_buffer, "HH")) != NULL) {
-        memcpy(pos, temp, 2);
-    }
-
-    // Минуты
-    snprintf(temp, sizeof(temp), "%02d", st->wMinute);
-    while ((pos = strstr(out_buffer, "MIN")) != NULL) {
-        memcpy(pos, temp, 2);
-    }
-
-    // Секунды
-    snprintf(temp, sizeof(temp), "%02d", st->wSecond);
-    while ((pos = strstr(out_buffer, "SS")) != NULL) {
-        memcpy(pos, temp, 2);
-    }
-
-    // Миллисекунды
-    snprintf(temp, sizeof(temp), "%03d", st->wMilliseconds);
-    while ((pos = strstr(out_buffer, "MS")) != NULL) {
-        memcpy(pos, temp, 2);
-    }
-
-    return true;
+    return (*m == '\0');
 }
