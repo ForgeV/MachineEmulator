@@ -19,6 +19,9 @@ typedef struct {
     char path_source_err[MAX_PATH];
 } AppConfig;
 
+extern volatile BOOL fullDiskFlag;
+extern volatile long long int totalBytes;
+
 bool load_configuration(int argc, char *argv[], AppConfig *config);
 void load_from_ini(const char* absolute_ini_path, AppConfig* config);
 #endif

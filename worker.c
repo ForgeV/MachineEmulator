@@ -10,7 +10,7 @@
 
 extern HANDLE hShutdownEvent;
 extern HANDLE hConsoleMutex;
-
+volatile long long int totalBytes = 0;
 // CreateThread принимает только один указатель, поэтому мы упаковываем всё нужное в эту структуру.
 typedef struct {
     AppConfig* config;
@@ -47,6 +47,12 @@ DWORD WINAPI base_worker(LPVOID lpParam) {
             ReleaseMutex(hConsoleMutex);
             break;
         }
+        if (fullDiskFlag) {
+            WaitForSingleObject(hConsoleMutex, INFINITE);
+            printf("[%s] Достигнут лимит по размеру диска (%d). Поток завершается.\n", p->thread_name, p->config->max_rows);
+            ReleaseMutex(hConsoleMutex);
+            break;
+        }
 
         // 1. Генерируем случайную строку по шаблону.
         if (generate_event_string(p->templates, log_body, sizeof(log_body))) {
@@ -56,6 +62,8 @@ DWORD WINAPI base_worker(LPVOID lpParam) {
 
             // 3. Склеиваем время и тело лога в одну строчку.
             snprintf(final_line, sizeof(final_line), "[%s] %s", time_str, log_body);
+
+            totalBytes += sizeof(char) * strlen(final_line);
 
             // 4. Отправляем в логгер.
             write_log(p->logger, final_line);

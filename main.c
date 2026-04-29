@@ -29,6 +29,11 @@ BOOL WINAPI ConsoleCtrlHandler(DWORD dwCtrlType) {
 }
 
 int main(int argc, char *argv[]) {
+    // Старт замеров времени работы программы
+    LARGE_INTEGER frequency;
+    LARGE_INTEGER start_time, end_time;
+    QueryPerformanceFrequency(&frequency);
+    QueryPerformanceCounter(&start_time);
     // 65001 кодовая страница UTF-8.
     // Без этого кириллица в консоли превратится в иероглифы.
     SetConsoleCP(65001);
@@ -104,6 +109,12 @@ int main(int argc, char *argv[]) {
     CloseHandle(hShutdownEvent);
     CloseHandle(hConsoleMutex);
 
+    // Считаем фактическое время в миллисекундах
+    QueryPerformanceCounter(&end_time);
+    double total_actual_ms = (double)(end_time.QuadPart - start_time.QuadPart) * 1000.0 / frequency.QuadPart;
+
+
     printf("[MAIN] Программа завершена.\n");
+    printf("[MAIN] Средняя скорость записи: %f б/мс", totalBytes/total_actual_ms);
     return EXIT_SUCCESS;
 }

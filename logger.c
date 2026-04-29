@@ -5,8 +5,10 @@
 #include <time.h>
 #include "logger.h"
 
-#define FIVE_MB (5 * 1024 * 1024)
+#include "config.h"
 
+#define FIVE_MB (5 * 1024 * 1024)
+volatile BOOL fullDiskFlag = FALSE;
 // Структура для "асинхронного сброса". Нужна, чтобы перекинуть данные
 // из оперативной памяти в файл в отдельном потоке и не тормозить основной эмулятор.
 typedef struct {
@@ -66,6 +68,8 @@ bool init_logger(LoggerContext* ctx, const char* dir_path, const char* base_name
 
 // Самая главная функция записи
 bool write_log(LoggerContext* ctx, const char* log_string) {
+
+
     if (!ctx || ctx->hFile == INVALID_HANDLE_VALUE) return false;
 
     // Ждем своей очереди на захват мьютекса.
@@ -131,13 +135,19 @@ bool write_log(LoggerContext* ctx, const char* log_string) {
     SetFilePointer(ctx->hFile, 0, NULL, FILE_END);
     DWORD bytesWritten;
 
-    // Пишем саму строку
-    WriteFile(ctx->hFile, data_to_write, data_len, &bytesWritten, NULL);
-    // Дописываем перенос строки
-    WriteFile(ctx->hFile, "\r\n", 2, &bytesWritten, NULL);
+    bool writeResult = WriteFile(ctx->hFile, data_to_write, (DWORD)data_len, &bytesWritten, NULL);
 
-    // Сбрасываем кэш на диск, чтобы логи не пропали в случае вылета
-    FlushFileBuffers(ctx->hFile);
+    // Дописываем перенос строки, если первая запись успешна
+    if (writeResult) {
+        writeResult = WriteFile(ctx->hFile, "\r\n", 2, &bytesWritten, NULL);
+    }
+
+    // 4. Проверяем результат записи и сброса буферов
+    if (!writeResult || !FlushFileBuffers(ctx->hFile)) {
+        if (GetLastError() == ERROR_DISK_FULL) {
+            fullDiskFlag = true;
+        }
+    }
 
     // Отпускаем мьютекс
     ReleaseMutex(ctx->hMutex);
